@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --color-bg1: #9dc6c2;
+    --color-bg2: #f9f4e8;
+    --color1: 249, 244, 232;
+    --color2: 66, 138, 162;
+    --color3: 66, 138, 162;
+    --color4: 157, 198, 194;
+    --color5: 175, 216, 220;
+    --circle-size: 80%;
+    --blending: hard-light;
+}
+
+.gradient-bg {
+    overflow: hidden;
+    background: linear-gradient(40deg, var(--color-bg2), var(--color-bg1));
+}
+
+.input-div {
+    position: relative;
+    display: grid;
+    border-bottom: 2px solid #d9d9d9;
+}
+
+.input-div > div {
+    position: relative;
+    height: 43px;
+}
+
+.input-div > div > h5 {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    @apply text-dark-blue;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.input-div:before,
+.input-div:after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    width: 0%;
+    height: 2px;
+    @apply bg-dark-blue;
+    transition: 0.4s;
+}
+
+.input-div:before {
+    right: 50%;
+}
+
+.input-div:after {
+    left: 50%;
+}
+
+.input-div.focus:before,
+.input-div.focus:after {
+    width: 50%;
+}
+
+.input-div.focus > div > h5 {
+    top: 0;
+    font-size: 13px;
+}
+
+.input-div.focus > .i > i {
+    color: #e0d2d2;
+}
+
+.input-div > div > input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: none;
+    padding: 0.5rem 0.7rem;
+    font-size: 1rem;
+    color: #555;
+    font-family: "poppins", sans-serif;
+}
+
+@layer base {
+  :root {
+        --radius: 0.5rem;
+    }
+}
+
+.glassmorphism {
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
+}
+
+.spinner {
+  border-top-color: #1e3a8a; /* dark-blue */
+  border-right-color: transparent;
+  border-bottom-color: #1e3a8a;
+  border-left-color: transparent;
+  border-width: 4px;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -11,7 +11,7 @@ const Sidebar: React.FC<SidelinkProps> = ({selected, handler}) => {
   ];
 
   return (
-    <div className="p-2 glassmorphism rounded-3xl w-2/12 h-96">
+    <div className="p-2 sidebar-shadow rounded-3xl w-2/12 h-96">
       <Sidelink links={links} selected={selected} handler={handler} />
     </div>
   );

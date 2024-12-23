@@ -90,7 +90,7 @@ export const deleteCandidate = async (req: express.Request, res: express.Respons
     try {
         const deletedCandidate = await prisma.candidate.delete({
             where: {
-                id
+                id: id,
             }
         });
         res.status(200).json({ message: "Candidate deleted successfully", deletedCandidate });

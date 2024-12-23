@@ -2,16 +2,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getData } from "@/hooks/getAllCandidate";
-import Image from "next/image";
 import { Button } from "@/components/UI/button";
 import { useAuthStore } from "@/store/authStore";
 import Spinner from "@/components/UI/Spinner";
 import { useRouter } from "next/navigation";
+import CardCandidate from "@/components/containers/CardCandidate";
+import getAllCandidates from "@/hooks/getAllCandidate";
 
 export default function Vote() {
   const { setDecodedToken, decodedToken } = useAuthStore();
-  const [candidates, setCandidates] = useState<CandidateProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasVoted, setHasVoted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,6 +19,36 @@ export default function Vote() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+  const handleDeleteCandidate = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this candidate?")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8000/candidates/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      const data = await getAllCandidates();
+
+      if (response.ok) {
+        alert(data.message || "Candidate deleted successfully.");
+
+        window.location.reload();
+      } else {
+        alert(data.message || "Failed to delete the candidate.");
+      }
+    } catch (error) {
+      console.error("Error while deleting candidate:", error);
+      alert("An error occurred. Please try again.");
+    }
+  };
+
+ 
   const handleAddCandidate = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
@@ -35,10 +64,6 @@ export default function Vote() {
 
       if (response.status === 201) {
         alert(data.message);
-        setCandidates((prevCandidates) => [
-          ...prevCandidates,
-          data.newCandidate,
-        ]);
         closeModal();
       } else {
         alert(data.message);
@@ -100,15 +125,6 @@ export default function Vote() {
     fetchDecodedToken();
   }, [setDecodedToken]);
 
-  useEffect(() => {
-    const fetchCandidates = async () => {
-      const data = await getData();
-      setCandidates(data?.data || []);
-    };
-
-    fetchCandidates();
-  }, []);
-
   const handleVote = async (candidateId: string) => {
     try {
       const response = await fetch("http://localhost:8000/vote", {
@@ -128,6 +144,7 @@ export default function Vote() {
         alert(data.message);
       } else {
         alert(data.message);
+        router.push("/thanks");
         setHasVoted(true);
       }
     } catch (error) {
@@ -170,7 +187,7 @@ export default function Vote() {
           </div>
 
           {isModalOpen && (
-            <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+            <div className="fixed inset-0 z-10 flex justify-center items-center bg-black bg-opacity-50">
               <div className="bg-white p-6 rounded-lg w-96">
                 <h2 className="text-xl mb-4">Add Candidate</h2>
                 <form onSubmit={handleAddCandidate}>
@@ -229,35 +246,7 @@ export default function Vote() {
           )}
 
           <div className="flex justify-around md:flex-row flex-col mx-20 my-5 items-center flex-wrap">
-            {candidates.map((candidate: any, index: any) => (
-              <div
-                className="glassmorphism flex flex-col gap-2 items-center my-5 md:my-0 w-52 h-[23rem] rounded-lg transition duration-300 ease-in-out hover:scale-110"
-                key={index}
-              >
-                <div className="avatar static m-2">
-                  <div className="w-48 h-60 rounded-lg candidate-img justify-center items-center">
-                    <Image
-                      src={`http://localhost:8000/uploads/${candidate?.image}`}
-                      alt=""
-                      width={100}
-                      height={100}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
-                <div className="text-dark-blue w-44 text-center font-bold">
-                  <span className="text-lg leading-none">
-                    {candidate?.name}
-                  </span>
-                </div>
-                <Button
-                  onClick={() => handleVote(candidate.id)}
-                  className="text-white text-xl px-10 bg-dark-blue rounded transition duration-300 hover:text-dark-blue hover:bg-light-blue"
-                >
-                  Vote
-                </Button>
-              </div>
-            ))}
+            <CardCandidate onVote={handleVote} onDelete={handleDeleteCandidate} decoded={decodedToken} />
           </div>
     </>
   );

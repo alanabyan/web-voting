@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-// src/pages/users.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -13,7 +12,6 @@ import {
   DropdownMenuItem,
 } from "@/components/UI/dropdown-menu";
 import { Icon } from "@iconify/react";
-// Tambahkan import untuk Dialog
 import {
   Dialog,
   DialogContent,
@@ -21,7 +19,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/UI/dialog";
-import { Input } from "@/components/UI/input"; // Input dari ShadCN untuk form Add User
+import { Input } from "@/components/UI/input";
 import toast, { Toaster } from "react-hot-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../UI/select";
 
@@ -35,7 +33,6 @@ interface User {
   hasVoted: boolean;
 }
 
-// Fungsi untuk mengambil data user
 const getDataUser = async () => {
   try {
     const response = await fetch("http://localhost:8000/vote/all", {
@@ -81,7 +78,6 @@ const Users = () => {
     fetchUsers();
   }, []);
 
-  // Fungsi untuk menerapkan filter
   const applyFilters = () => {
     let filtered = users;
 
@@ -103,7 +99,6 @@ const Users = () => {
     console.log("Filtered Users:", filteredUsers);
   }, [kelasFilter, votingFilter]);
 
-  // Fungsi delete user
   const handleDelete = async () => {
     if (!selectedUserId) return alert("No user selected for deletion");
 
@@ -127,7 +122,6 @@ const Users = () => {
       setSelectedUserId(null);
       window.location.reload();
 
-      // Refresh data
       const data = await getDataUser();
       setUsers(data);
     } catch (error) {
@@ -139,13 +133,11 @@ const Users = () => {
   const handleAddUser = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validasi input sebelum mengirim data
     if (!name || !nis || !kelas || !role || !password) {
       toast.error("Semua kolom harus diisi!");
       return;
     }
 
-    // Data yang akan dikirim ke backend
     const newUser = {
       name,
       nis,
@@ -165,14 +157,13 @@ const Users = () => {
       });
 
       if (!response.ok) {
-        const errorData = await response.json(); // Ambil pesan error dari server
+        const errorData = await response.json();
         console.error("Error data from backend:", errorData);
         throw new Error("Gagal menambahkan user");
       }
 
       toast.success("User berhasil ditambahkan!");
 
-      // Tutup modal dan reset form
       setIsAddUserModalOpen(false);
       setName("");
       setNis("");
@@ -180,7 +171,6 @@ const Users = () => {
       setRole("");
       setPassword("");
 
-      // Refresh data user
       const usersData = await getDataUser();
       setUsers(usersData);
       setFilteredUsers(usersData);
@@ -190,7 +180,6 @@ const Users = () => {
     }
   };
 
-  // Definisi kolom untuk DataTable
   const columns: ColumnDef<User>[] = [
     {
       accessorKey: "index",
@@ -264,8 +253,7 @@ const Users = () => {
   ];
 
   return (
-    <div className="container mx-auto text-dark-blue font-bold glassmorphism rounded-3xl w-[100%] p-2 md:p-10">
-      {/* Dropdown filter */}
+    <div className="container mx-auto text-dark-blue h-screen overflow-y-auto font-bold bg-table sidebar-shadow rounded-3xl w-[100%] p-2 md:p-10">
       <div className="mb-10">
         <p className="text-lg text-main-bg font-medium">list</p>
         <p className="text-3xl font-extrabold tracking-tight text-dark-blue dark:text-lightOne">
@@ -274,7 +262,6 @@ const Users = () => {
       </div>
       <div className="flex gap-4 mb-6 justify-end">
         <DropdownMenu>
-          {/* Dropdown Filter */}
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
@@ -335,7 +322,6 @@ const Users = () => {
 
       <DataTable columns={columns} data={filteredUsers} />
 
-      {/* Modal Konfirmasi Delete */}
       <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
         <DialogContent>
           <DialogHeader>
@@ -362,7 +348,6 @@ const Users = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Modal Tambah User */}
       <Dialog open={isAddUserModalOpen} onOpenChange={setIsAddUserModalOpen}>
         <DialogContent>
           <DialogHeader>

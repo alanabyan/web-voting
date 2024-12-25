@@ -58,7 +58,7 @@ export const getWinner = async (
           candidateId: "desc",
         },
       },
-      take: 3,
+      // take: 3,
     });
 
     if (result.length === 0) {
@@ -73,7 +73,7 @@ export const getWinner = async (
       },
     });
 
-    if (!candidates || candidates.length !== result.length) {
+    if (!candidates) {
       return res.status(404).json({ message: "Candidates not found" });
     }
 
@@ -91,7 +91,7 @@ export const getWinner = async (
   }
 };
 
-export const  getVotes = async (req: Request, res: Response) => {
+export const getVotes = async (req: Request, res: Response) => {
   try {
     const totalUser = await prisma.user.count();
     const userVoted = await prisma.vote.count();
@@ -145,5 +145,19 @@ export const getUsersWithVoteStatus = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error fetching users with vote status:", error);
     res.status(500).json({ message: "An unexpected error occurred" });
+  }
+};
+
+export const getVotesById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const voteCount = await prisma.vote.count({
+      where: { candidateId: id },
+    });
+    res
+      .status(200)
+      .json({ message: "get votes successfully", votes: voteCount });
+  } catch (error) {
+    return res.status(500).json({ message: "An unexpected error occurred" });
   }
 };

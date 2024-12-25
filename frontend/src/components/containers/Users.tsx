@@ -277,8 +277,17 @@ const Users = () => {
             <DropdownMenuItem onClick={() => setKelasFilter(null)}>
               Semua
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setKelasFilter("XII SIJA I")}>
-              XII SIJA
+            <DropdownMenuItem onClick={() => setKelasFilter("XII SIJA I" )}>
+              XII SIJA I
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setKelasFilter("XII SIJA II" )}>
+              XII SIJA II
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setKelasFilter("XII DKV I")}>
+              XII DKV I
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setKelasFilter("XII DKV II")}>
+              XII DKV II
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setKelasFilter("GURU PNS")}>
               GURU PNS

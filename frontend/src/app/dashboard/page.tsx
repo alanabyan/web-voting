@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Sidebar from "@/components/layouts/Sidebar";
 import Users from "@/components/containers/Users";
+import Statistics from "@/components/containers/Statistics";
 
 const DashboardPage = () => {
   const [selectedLink, setSelectedLink] = useState("users");
@@ -15,7 +16,7 @@ const DashboardPage = () => {
       <div className="flex m-2 md:m-10 gap-3">
         <Sidebar selected={selectedLink} handler={handleLinkClick} />
         {selectedLink === "users" && <Users />}
-        {selectedLink === "statistics" && <div>Statistic Content</div>}
+        {selectedLink === "statistics" && <Statistics />}
       </div>
     </div>
   );

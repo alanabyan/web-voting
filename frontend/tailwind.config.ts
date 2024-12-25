@@ -15,6 +15,7 @@ const config: Config = {
         foreground: "var(--foreground)",
         "dark-blue": "#03486B",
         "light-blue": "#AFD8DC",
+        "main-blue": "#428AA2",
         "main-bg": "#255F74",
       },
       borderRadius: {

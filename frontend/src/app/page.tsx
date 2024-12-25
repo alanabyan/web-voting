@@ -21,7 +21,6 @@ export default function Home() {
   });
 
   useEffect(() => {
-    // Fetch data from the endpoint
     const fetchChartData = async () => {
       try {
         const response = await fetch("http://localhost:8000/vote/calculation", {

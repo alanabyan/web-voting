@@ -18,6 +18,7 @@ import {
 import { Label } from "@/components/UI/label";
 import { Input } from "@/components/UI/input";
 import { Textarea } from "@/components/UI/textarea";
+import DialogModal from "@/components/DialogModal";
 
 export default function Vote() {
   const { setDecodedToken, decodedToken } = useAuthStore();
@@ -25,6 +26,11 @@ export default function Vote() {
   const [hasVoted, setHasVoted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isVoteModalOpen, setIsVoteModalOpen] = useState(false);
+  const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>(
+    null
+  );
 
   const handleFileSelect = (file: File | null) => {
     if (file) {
@@ -74,9 +80,9 @@ export default function Vote() {
       const data = await response.json();
 
       if (response.status === 201) {
-        toast.success(data.message)
+        toast.success(data.message);
         closeModal();
-        window.location.reload()
+        window.location.reload();
       } else {
         alert(data.message);
       }
@@ -155,7 +161,7 @@ export default function Vote() {
       if (response.status === 409) {
         alert(data.message);
       } else {
-        toast.success(data.message)
+        toast.success(data.message);
         router.push("/thanks");
         setHasVoted(true);
       }
@@ -276,9 +282,45 @@ export default function Vote() {
 
         <div className="flex justify-around md:flex-row flex-col mx-20 my-5 items-center flex-wrap">
           <CardCandidate
-            onVote={handleVote}
-            onDelete={handleDeleteCandidate}
+            onOpenDeleteDialog={(candidateId) => {
+              setSelectedCandidateId(candidateId);
+              setIsDeleteModalOpen(true);
+            }}
+            onOpenVoteDialog={(candidateId) => {
+              setSelectedCandidateId(candidateId);
+              setIsVoteModalOpen(true);
+            }}
             decoded={decodedToken}
+          />
+          <DialogModal
+            isOpen={isDeleteModalOpen}
+            title="Delete Candidate"
+            message="Are you sure you want to delete this candidate?"
+            onClose={() => setIsDeleteModalOpen(false)}
+            onConfirm={() => {
+              if (selectedCandidateId) {
+                handleDeleteCandidate(selectedCandidateId);
+              }
+              setIsDeleteModalOpen(false);
+            }}
+            confirmLabel="Hapus"
+            confirmButtonVariant="destructive"
+          />
+
+          <DialogModal
+            isOpen={isVoteModalOpen}
+            title="Vote Candidate"
+            message="Kamu yakin ingin memberikan suara kepada kandidat ini"
+            onClose={() => setIsVoteModalOpen(false)}
+            onConfirm={() => {
+              if (selectedCandidateId) {
+                handleVote(selectedCandidateId);
+              }
+              setIsVoteModalOpen(false);
+            }}
+            confirmLabel="Vote"
+            confirmButtonVariant="outline"
+            confirmButtonClass="bg-dark-blue text-light-blue hover:bg-light-blue hover:text-dark-blue flex items-center"
           />
         </div>
       </div>

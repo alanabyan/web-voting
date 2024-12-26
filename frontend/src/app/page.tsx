@@ -105,8 +105,8 @@ export default function Home() {
   }, [chartData]);
 
   return (
-    <div className="-z-10 h-screen">
-      <div className="relative z-10 flex flex-col items-center justify-between ">
+    <div className="-z-10 overflow-hidden">
+      <div className="z-10 flex flex-col items-center justify-between ">
         <h1 className="md:text-2xl text-xl text-center text-dark-blue font-extrabold">
           Civitas SMK Negeri 1 Cibinong sudah memberikan suaranya!
         </h1>

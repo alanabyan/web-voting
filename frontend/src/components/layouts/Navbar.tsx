@@ -5,18 +5,23 @@ import Title from "../UI/Title";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../UI/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../UI/dropdown-menu";
 import { Button } from "../UI/button";
 import { Icon } from "@iconify/react";
-
 
 export default function Navbar() {
   const pathname = usePathname();
   const [decodedToken, setDecodedToken] = useState<{
     name?: string | null;
+    role?: string | null;
   } | null>(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter()
+  const router = useRouter();
 
   const handleLogout = async () => {
     try {
@@ -124,11 +129,22 @@ export default function Navbar() {
                   </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
+                  {decodedToken?.role === "ADMIN" ? (
+                    <DropdownMenuItem>
+                      <Link
+                        href={"/dashboard"}
+                        className="flex items-center gap-2"
+                      >
+                        <Icon icon="mdi:home" />
+                        Back To Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                  ) : null}
                   <DropdownMenuItem>
-                    <Link href={"/dashboard"} className="flex items-center gap-2"><Icon icon="mdi:home" />Back To Dashboard</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Button className="bg-transparent text-black flex items-center hover:bg-transparent -ml-3.5" onClick={() => handleLogout()}>
+                    <Button
+                      className="bg-transparent text-black flex items-center hover:bg-transparent -ml-3.5"
+                      onClick={() => handleLogout()}
+                    >
                       <Icon icon="material-symbols:logout" /> Logout
                     </Button>
                   </DropdownMenuItem>

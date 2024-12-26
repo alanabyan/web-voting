@@ -1,4 +1,4 @@
-import { createCandidate, deleteCandidate, getCandidates,  updateCandidate } from "../controllers/candidate.controller";
+import { createCandidate, deleteCandidate, getCandidateById, getCandidates,  updateCandidate } from "../controllers/candidate.controller";
 import { authenticateJWT } from "../middleware/authMiddleware";
 import { authorizeAdmin } from "../middleware/authorizeAdmin";
 import { upload } from "../middleware/uploadMiddleware";
@@ -12,6 +12,7 @@ candiatesRouter.post(
   createCandidate
 );
 candiatesRouter.get("/", authenticateJWT, getCandidates);
+candiatesRouter.get("/:id", authenticateJWT, getCandidateById)
 candiatesRouter.put("/:id", authenticateJWT, updateCandidate);
 candiatesRouter.delete("/:id", authenticateJWT, deleteCandidate);
 

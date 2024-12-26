@@ -46,7 +46,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center gradient-bg">
+    <div className="min-h-screen flex items-center justify-center">
       <div className="w-11/12 lg:w-10/12 glassmorphism rounded-xl shadow-lg overflow-hidden my-5">
         <div className="flex flex-col sm:flex-row h-full">
           <LoginBanner />

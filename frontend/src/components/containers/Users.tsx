@@ -21,8 +21,14 @@ import {
 } from "@/components/UI/dialog";
 import { Input } from "@/components/UI/input";
 import toast, { Toaster } from "react-hot-toast";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../UI/select";
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../UI/select";
+import Spinner from "../UI/Spinner";
 
 interface User {
   id: string;
@@ -67,13 +73,21 @@ const Users = () => {
   const [nis, setNis] = useState("");
   const [role, setRole] = useState("");
   const [password, setPassword] = useState("");
-  const [kelas, setKelas] = useState("")
+  const [kelas, setKelas] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const data = await getDataUser();
-      setUsers(data);
-      setFilteredUsers(data);
+      setIsLoading(true);
+      try {
+        const data = await getDataUser();
+        setUsers(data);
+        setFilteredUsers(data);
+      } catch (error) {
+        console.log("Error fetching Users", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchUsers();
   }, []);
@@ -253,154 +267,186 @@ const Users = () => {
   ];
 
   return (
-    <div className="container mx-auto text-dark-blue h-screen overflow-y-auto font-bold bg-table sidebar-shadow rounded-3xl w-[100%] p-2 md:p-10">
-      <div className="mb-10">
-        <p className="text-lg text-main-bg font-medium">list</p>
-        <p className="text-3xl font-extrabold tracking-tight text-dark-blue dark:text-lightOne">
-          users
-        </p>
-      </div>
-      <div className="flex gap-4 mb-6 justify-end">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+    <div className="container mx-auto text-dark-blue overflow-y-auto font-bold bg-table sidebar-shadow rounded-3xl w-[100%] p-2 md:p-10">
+      {isLoading ? (
+        <div className="flex justify-center items-center h-screen">
+          <Spinner />
+        </div>
+      ) : (
+        <>
+          <div className="mb-10">
+            <p className="text-lg text-main-bg font-medium">list</p>
+            <p className="text-3xl font-extrabold tracking-tight text-dark-blue dark:text-lightOne">
+              users
+            </p>
+          </div>
+          <div className="flex gap-4 mb-6 justify-end">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="bg-light-blue text-dark-blue hover:bg-dark-blue hover:text-light-blue flex items-center"
+                >
+                  <div className="flex items-center gap-2">
+                    Kelas
+                    <Icon icon={"tabler:chevron-down"} width={20} />
+                  </div>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => setKelasFilter(null)}>
+                  Semua
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setKelasFilter("XII SIJA I")}>
+                  XII SIJA I
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setKelasFilter("XII SIJA II")}>
+                  XII SIJA II
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setKelasFilter("XII DKV I")}>
+                  XII DKV I
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setKelasFilter("XII DKV II")}>
+                  XII DKV II
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setKelasFilter("GURU PNS")}>
+                  GURU PNS
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="bg-light-blue text-dark-blue hover:bg-dark-blue hover:text-light-blue flex items-center"
+                >
+                  <div className="flex items-center gap-2">
+                    Status Voting
+                    <Icon icon={"tabler:chevron-down"} width={20} />
+                  </div>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => setVotingFilter(null)}>
+                  Semua
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setVotingFilter("voted")}>
+                  Sudah Vote
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setVotingFilter("not-voted")}>
+                  Belum Vote
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <Button
               variant="outline"
               className="bg-light-blue text-dark-blue hover:bg-dark-blue hover:text-light-blue flex items-center"
+              onClick={() => setIsAddUserModalOpen(true)}
             >
-              <div className="flex items-center gap-2">
-                Kelas
-                <Icon icon={"tabler:chevron-down"} width={20} />
-              </div>
+              Add User
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => setKelasFilter(null)}>
-              Semua
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setKelasFilter("XII SIJA I" )}>
-              XII SIJA I
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setKelasFilter("XII SIJA II" )}>
-              XII SIJA II
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setKelasFilter("XII DKV I")}>
-              XII DKV I
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setKelasFilter("XII DKV II")}>
-              XII DKV II
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setKelasFilter("GURU PNS")}>
-              GURU PNS
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </div>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="bg-light-blue text-dark-blue hover:bg-dark-blue hover:text-light-blue flex items-center"
-            >
-              <div className="flex items-center gap-2">
-                Status Voting
-                <Icon icon={"tabler:chevron-down"} width={20} />
-              </div>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => setVotingFilter(null)}>
-              Semua
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setVotingFilter("voted")}>
-              Sudah Vote
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setVotingFilter("not-voted")}>
-              Belum Vote
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          <DataTable columns={columns} data={filteredUsers} />
 
-        <Button
-          variant="outline"
-          className="bg-light-blue text-dark-blue hover:bg-dark-blue hover:text-light-blue flex items-center"
-          onClick={() => setIsAddUserModalOpen(true)}
-        >
-          Add User
-        </Button>
-      </div>
+          <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Hapus User</DialogTitle>
+              </DialogHeader>
+              <p>Apakah Anda yakin ingin menghapus user ini?</p>
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsDeleteModalOpen(false)}
+                >
+                  Batal
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={() => {
+                    handleDelete();
+                    setIsDeleteModalOpen(false);
+                  }}
+                >
+                  Hapus
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
 
-      <DataTable columns={columns} data={filteredUsers} />
-
-      <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Hapus User</DialogTitle>
-          </DialogHeader>
-          <p>Apakah Anda yakin ingin menghapus user ini?</p>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsDeleteModalOpen(false)}
-            >
-              Batal
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={() => {
-                handleDelete();
-                setIsDeleteModalOpen(false);
-              }}
-            >
-              Hapus
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={isAddUserModalOpen} onOpenChange={setIsAddUserModalOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Tambah User Baru</DialogTitle>
-          </DialogHeader>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              setIsAddUserModalOpen(false);
-            }}
+          <Dialog
+            open={isAddUserModalOpen}
+            onOpenChange={setIsAddUserModalOpen}
           >
-            <div className="grid gap-4 py-4">
-              <Input placeholder="Nama" value={name} onChange={(e) => setName(e.target.value)} />
-              <Input placeholder="NIS" value={nis} onChange={(e) => setNis(e.target.value)} />
-              <Input placeholder="Kelas" value={kelas} onChange={(e) => setKelas(e.target.value)} />
-              <Select onValueChange={(value: string) => {
-                setRole(value)
-              }}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Role" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="USER">
-                    USER
-                  </SelectItem>
-                  <SelectItem value="ADMIN">
-                    ADMIN
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              <Input placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            </div>
-            <DialogFooter>
-              <Button
-                variant="outline"
-                onClick={() => setIsAddUserModalOpen(false)}
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Tambah User Baru</DialogTitle>
+              </DialogHeader>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setIsAddUserModalOpen(false);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleAddUser(e);
+                  }
+                }}
               >
-                Batal
-              </Button>
-              <Button type="submit" onClick={handleAddUser}>Tambah</Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+                <div className="grid gap-4 py-4">
+                  <Input
+                    placeholder="Nama"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                  <Input
+                    placeholder="NIS"
+                    value={nis}
+                    onChange={(e) => setNis(e.target.value)}
+                  />
+                  <Input
+                    placeholder="Kelas"
+                    value={kelas}
+                    onChange={(e) => setKelas(e.target.value)}
+                  />
+                  <Select
+                    onValueChange={(value: string) => {
+                      setRole(value);
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="USER">USER</SelectItem>
+                      <SelectItem value="ADMIN">ADMIN</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsAddUserModalOpen(false)}
+                  >
+                    Batal
+                  </Button>
+                  <Button type="submit" onClick={handleAddUser}>
+                    Tambah
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </>
+      )}
       <Toaster position="top-center" />
     </div>
   );

@@ -6,7 +6,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev src/index.ts"
   },
-  "keywords": [],
+  "keywords": [
+    
+  ],
   "author": "",
   "license": "ISC",
   "description": "",

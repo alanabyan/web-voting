@@ -1,4 +1,4 @@
-interface CandidateProps {
+export interface CandidateProps {
     id: string;
     vision: string;
     name: string;

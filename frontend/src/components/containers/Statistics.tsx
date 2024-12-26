@@ -80,7 +80,7 @@ export default function Statistics() {
   }, [winners]);
 
   return (
-    <div className="glassmorphism rounded-3xl container w-full grid grid-cols-1">
+    <div className="glassmorphism rounded-3xl w-full">
       <div className="flex justify-center">
         <div className="text-dark-blue font-bold text-4xl py-5">
           Congratulations To
@@ -107,7 +107,10 @@ export default function Statistics() {
             </div>
           </div>
         ))}
-        <div className="my-10 flex justify-center">
+      </div>
+      <div className="flex justify-center">
+        <div className="my-10 flex flex-col w-[32rem]">
+          <p className="text-center">Voters per candidate</p>
           <canvas
             ref={canvasRef}
             width={200}

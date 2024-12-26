@@ -58,7 +58,7 @@ export const getWinner = async (
           candidateId: "desc",
         },
       },
-      // take: await prisma.candidate.count(),
+      // take: 3,
     });
 
     if (result.length === 0) {

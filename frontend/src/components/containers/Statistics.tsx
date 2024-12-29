@@ -11,10 +11,25 @@ interface VoteProps {
   totalUser: string;
 }
 
+interface CandidateWinner {
+  id: string;
+  name: string;
+  vision: string;
+  mission: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Winner {
+  candidate: CandidateWinner;
+  votes: number;
+}
+
 export default function Statistics() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartRef = useRef<Chart | null>(null);
-  const [winners, setWinners] = useState<any[]>([]);
+  const [winners, setWinners] = useState<Winner[]>([]);
   const [totalVoters, setTotalVoters] = useState<VoteProps>();
 
   useEffect(() => {
@@ -93,7 +108,7 @@ export default function Statistics() {
         </div>
       </div>
       <div className="grid grid-cols-3 grid-rows-1 gap-2">
-        {winners.map((winner: any, index: number) => (
+        {winners.map((winner, index: number) => (
           <div key={index} className="">
             <div className="flex justify-center text-center">
               <div className="flex flex-col">

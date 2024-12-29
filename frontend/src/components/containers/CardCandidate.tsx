@@ -8,15 +8,13 @@ import { useRouter } from "next/navigation";
 import { CandidateProps } from "@/interface/CandidateType";
 
 interface CandidateCardProps {
-  onVote: (candidateId: string) => void;
-  onDelete: (id: string) => void;
-  decoded: { role: string };
+  decoded: { name?: string | null | undefined; role?: string | null | undefined; } | null;
   onOpenDeleteDialog: (candidateId: string) => void;
   onOpenVoteDialog: (candidateId: string) => void;
 }
 
 const CardCandidate: React.FC<CandidateCardProps> = ({
-  decoded,
+  decoded = {role : ""},
   onOpenDeleteDialog,
   onOpenVoteDialog,
 }) => {
@@ -57,7 +55,7 @@ const CardCandidate: React.FC<CandidateCardProps> = ({
           <div className="text-dark-blue w-44 text-center font-bold">
             <span className="text-lg leading-none">{candidate?.name}</span>
           </div>
-          {decoded.role === "ADMIN" ? (
+          {decoded?.role === "ADMIN" ? (
               <Button
                 variant="destructive"
                 onClick={() => onOpenDeleteDialog(candidate.id)}

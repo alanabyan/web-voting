@@ -68,7 +68,15 @@ export default function Vote() {
 
   const handleAddCandidate = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!selectedFile) {
+      alert("Please upload an image.");
+      return;
+    }
+
     const formData = new FormData(e.target as HTMLFormElement);
+
+    formData.append("image", selectedFile);
 
     try {
       const response = await fetch("http://localhost:8000/candidates", {
@@ -246,8 +254,9 @@ export default function Vote() {
                   onDrop={(e) => {
                     e.preventDefault();
                     const file = e.dataTransfer.files[0];
-                    handleFileSelect(file);
-                    console.log(file.name); // Handle file upload here
+                    if (file) {
+                      handleFileSelect(file);
+                    }
                   }}
                   onDragOver={(e) => e.preventDefault()}
                   onClick={() => document.getElementById("image")?.click()}
@@ -263,9 +272,10 @@ export default function Vote() {
                   id="image"
                   name="image"
                   className="opacity-0 absolute -z-10"
-                  required
                   onChange={(e) => {
                     const file = e.target.files?.[0];
+                    console.log(file);
+
                     handleFileSelect(file || null);
                   }}
                 />

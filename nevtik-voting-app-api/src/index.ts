@@ -12,8 +12,9 @@ app.use(
   cors({
     origin: "http://localhost:3000",
     credentials: true, 
-  })
+})
 );
+
 app.use(cookieParser());
 app.use(express.json());
 
@@ -21,7 +22,6 @@ app.use("/auth", authRouter);
 app.use("/candidates", candiatesRouter)
 app.use("/vote", voteRouter)
 app.use("/uploads", express.static("images"));
-
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

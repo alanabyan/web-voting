@@ -7,7 +7,8 @@
     "dev": "ts-node-dev src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "prisma": "npx prisma migrate dev"
+    "prisma": "npx prisma migrate dev",
+    "import" : "npx ts-node importUsers.ts"
   },
   "keywords": [],
   "author": "",

@@ -30,8 +30,6 @@ const importUsers = async (csvFilePath: string) => {
         for (const user of users) {
             if (user.password && user.password.length > 0) {
               const hashedPassword = await bcrypt.hash(user.password, 10);
-             
-
           
           const existingUser = await prisma.user.findUnique({
             where: { nis: user.nis },
@@ -62,6 +60,10 @@ const importUsers = async (csvFilePath: string) => {
 
 const csvFilePath = "./src/data/users.csv"; 
 importUsers(csvFilePath);
+
+
+
+
 
 
 
